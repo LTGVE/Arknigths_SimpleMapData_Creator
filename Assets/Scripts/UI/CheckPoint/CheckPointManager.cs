@@ -21,7 +21,7 @@ public class CheckPointManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     { 
-        
+       
     }
     public void AddCheckPoint(Vector2 pos) { 
         GameObject cp = Instantiate(CheckPointPrefab, CheckPointPrefab.GetComponent<RectTransform>().anchoredPosition, Quaternion.identity);
