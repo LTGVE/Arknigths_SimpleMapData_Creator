@@ -13,6 +13,12 @@ public class MapInit : MonoBehaviour
     [SerializeField]
     public Material FobbidenMaterial;
     [SerializeField]
+    public Material endMaterial;
+    [SerializeField]
+    public Material StartMaterial;
+    [SerializeField]
+    public Material F_STARTMaterial;
+    [SerializeField]
     public GameObject Tile;
     [SerializeField]
     public GameObject Fobbiden;
@@ -22,9 +28,12 @@ public class MapInit : MonoBehaviour
     public LevelData LevelData;
     public bool isCreatedScene=false;
     public static MapInit _this;
+    public Dropdown TileType;
+    public GameObject mainBATTLE;
     void Start()
     {
         _this = this;
+        TileType=transform.Find("TileType").GetComponent<Dropdown>();
     }
 
     // Update is called once per frame
@@ -34,16 +43,25 @@ public class MapInit : MonoBehaviour
     }
 
     public void SpawnTile() {
-        GameObject BATTLE = new GameObject() { name="BATTLE"};
+        LevelData level=new LevelData();
+        if (mainBATTLE != null) {
+                Destroy(mainBATTLE);
+        }
+        GameObject BATTLE = new GameObject() { name = "BATTLE" };
+        mainBATTLE = BATTLE;
         GameObject Tile = new GameObject() { name = "Tile" };
         Tile.transform.parent = BATTLE.transform;
         GameObject Mesh = new GameObject() { name = "Mesh" };
+        Mesh.transform.position = new Vector3(0,0,0);
         Mesh.transform.parent = BATTLE.transform;
         var X = int.Parse(_this.transform.Find("X").GetComponent<InputField>().text);
         var Y = int.Parse(_this.transform.Find("Y").GetComponent<InputField>().text);
+        BATTLE.transform.position = new Vector3(-X/2 +1, -Y/2, 0);
+        Tile.transform.localPosition = new Vector3(-BATTLE.transform.position.x, -BATTLE.transform.position.y, 0);
         mapdata Mapdata = new mapdata();
         List<List<int>> map = new List<List<int>>();
         int count = 0;
+        var tiles = new List<tile>();
         for (int y = 0; y < Y; y++)
         {
             List<int> list = new List<int>();
@@ -51,11 +69,23 @@ public class MapInit : MonoBehaviour
             {
                 GameObject tile =Instantiate(Fobbiden);
                 tile.transform.parent = Mesh.transform;
-                tile.transform.position = new Vector3(x,y); 
+                tile.transform.localPosition = new Vector3(x,y); 
                 GameObject tileKey = new GameObject() { name = $"tile_fobbiden#({y},{x})" };
                 tileKey.transform.parent = Tile.transform;
-                tileKey.transform.position = tile.transform.position;
+                tileKey.transform.localPosition = new Vector3(tile.transform.position.x, tile.transform.position.y, -0.5f);
                 tileKey.AddComponent<BoxCollider2D>();
+                 tileKey.AddComponent<MapTile>().init(new Vector2(x,y));
+                var maptile=tileKey.GetComponent<MapTile>();
+                var tile1 = new tile()
+                { 
+                    tileKey = "tile_fobbiden",
+                    heightType = "HIGHLAND",
+                    buildableType = "NONE",
+                    passableMask = "FLY_ONLY",
+                    playerSideMask = "ALL"
+                };
+                tiles.Add(tile1);
+                tile.AddComponent<MapMesh>().init(tile1, maptile); 
                 list.Add(count);
                 count += 1;
             }
@@ -63,21 +93,8 @@ public class MapInit : MonoBehaviour
         }
         map.Reverse();
         Mapdata.map = map;
-        var tiles = new List<tile>();
-        for (int tilec = 0; tilec < count; tilec++)
-        {
-            var tile = new tile()
-            {
-
-                tileKey = "tile_fobbiden",
-                heightType = "HIGHLAND",
-                buildableType = "NONE",
-                passableMask = "FLY_ONLY",
-                playerSideMask = "ALL"
-            };
-                tiles.Add(tile);
-        }
         Mapdata.tiles = tiles;
+        level.mapdata = Mapdata;
     }
 
     public void SpawnScene() {

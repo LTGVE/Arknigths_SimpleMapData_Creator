@@ -1,12 +1,13 @@
 ﻿
 public enum TileType
 {
-    HIGHLAND,
-    FOBBIDEN,
-    ROAD,
-    FENCE_BOUND,
-    START,
-    END,
-    FLY_START
+    NONE=0,
+    HIGHLAND=1,
+    FOBBIDEN=2,
+    ROAD=3,
+    FENCE_BOUND=4,
+    START=5,
+    END=6,
+    FLY_START=7
 }
 

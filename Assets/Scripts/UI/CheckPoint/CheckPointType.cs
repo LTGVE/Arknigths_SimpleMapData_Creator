@@ -1,11 +1,11 @@
 ﻿
 public enum CheckPointType
 {
-    START,
-    END,
-    MOVE,
-    WAIT_FOR_SECOUNDS,
-    DISAPPEAR,
-    APPEAR_AT_POS
+    START=0,
+    END=1,
+    MOVE=2,
+    WAIT_FOR_SECONDS=3,
+    DISAPPEAR=4,
+    APPEAR_AT_POS=5
 }
 

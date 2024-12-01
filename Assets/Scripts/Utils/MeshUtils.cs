@@ -30,7 +30,10 @@ namespace Assets.Scripts.Utils
         public void Update()
         {
             if (Input.GetKeyDown(KeyCode.Mouse0)) {
-                GetObjectAtCoordinate();
+                var gameObject =GetObjectAtCoordinate();
+                if (MapInit._this.TileType.value!=0&&gameObject!=null) { 
+                gameObject.GetComponent<MapMesh>().ChangeTile(MapInit._this.TileType.value);
+                }
             }
         }
     }
