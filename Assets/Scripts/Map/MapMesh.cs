@@ -49,7 +49,7 @@ public class MapMesh : MonoBehaviour
                 }
             case TileType.START:
                 {
-                    tile.tileKey = "tile_end";
+                    tile.tileKey = "tile_start";
                     mapTile.gameObject.name = $"{tile.tileKey}#({mapTile.MapPos.y},{mapTile.MapPos.x})";
                     this.GetComponent<MeshRenderer>().material = MapInit._this.CommonMaterial;
                     this.transform.position = new Vector3(transform.position.x, transform.position.y, 0f);
@@ -63,6 +63,15 @@ public class MapMesh : MonoBehaviour
                     this.GetComponent<MeshRenderer>().material = MapInit._this.CommonMaterial;
                     this.transform.position = new Vector3(transform.position.x, transform.position.y, 0f);
                     tile.heightType = "LOWLAND";
+                    break;
+                }
+            case TileType.FLY_START:
+                {
+                    tile.tileKey = "tile_fly";
+                    this.GetComponent<MeshRenderer>().material = MapInit._this.FobbidenMaterial;
+                    this.transform.position = new Vector3(transform.position.x, transform.position.y, -0.5f);
+                    mapTile.gameObject.name = $"{tile.tileKey}#({mapTile.MapPos.y},{mapTile.MapPos.x})";
+                    tile.heightType = "HIGHLAND";
                     break;
                 }
         }

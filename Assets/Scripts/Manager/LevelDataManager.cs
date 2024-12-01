@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json;
 using UnityEngine;
 
 
@@ -20,15 +19,17 @@ namespace Assets.Scripts.Manager
             hasInfectionFloor = false;
             initGame();
         }
-        public void initGame()
+        public  void initGame()
         {
 
             enemiesCount = 0;
             var waves = GameData.waves;
             float fragTime = 0;
+            float fragTime2 = 0;
             for (int w = 0; w < waves.Count; w++)
             {
                 fragTime += (float)waves[w].preDelay;
+                fragTime2 += (float)waves[w].preDelay;
                 for (int f = 0; f < waves[w].fragments.Count; f++)
                 {
                     var fragment = waves[w].fragments[f];
@@ -42,10 +43,13 @@ namespace Assets.Scripts.Manager
                             if (action.actionType == "PREVIEW_CURSOR")
                             {
                                 action.spawnTime.Add(fragTime + (float)action.preDelay);
+                                action.WaveSpawnTime.Add(fragTime2 + (float)action.preDelay);
                             }
                             if (action.actionType == "DISPLAY_ENEMY_INFO")
                             {
                                 action.spawnTime.Add(fragTime + (float)action.preDelay);
+                                action.WaveSpawnTime.Add(fragTime2 + (float)action.preDelay);
+
                             }
                         }
                         else
@@ -57,21 +61,25 @@ namespace Assets.Scripts.Manager
                                 {
                                     var time = (float)action.preDelay + (float)((a - 1) * action.interval);
                                     action.spawnTime.Add(fragTime + (float)fragment.preDelay + time);
+                                    action.WaveSpawnTime.Add(fragTime2 + (float)fragment.preDelay + time);
                                     maxTime = Math.Max(maxTime, time);
                                 }
                             }
                             else
                             {
                                 action.spawnTime.Add(fragTime + (float)fragment.preDelay + (float)action.preDelay);
+                                action.WaveSpawnTime.Add(fragTime2 + (float)fragment.preDelay + (float)action.preDelay);
                                 maxTime = Math.Max(maxTime, (float)action.preDelay);
                             }
                             string t = string.Join(",", action.spawnTime);
-                            //           Debug.Log($"wave {w} fragment {f} action {i} count {action.count} Count {enemiesCount} interval {action.interval} time {t}");
+                            string wt = string.Join(",", action.WaveSpawnTime);
+                            //Debug.WriteLine($"wave {w} fragment {f} action {i} count {action.count} Count {enemiesCount} interval {action.interval} time {t} waveTime {wt}");
                         }
                     }
                     fragTime += (float)fragment.preDelay + maxTime;
-                    //      Debug.Log($"wave {w} fragment {f} maxTime {maxTime} fragTime {fragTime}");
+                    fragTime2 += (float)fragment.preDelay + maxTime;
                 }
+                fragTime2 = 0;
                 fragTime += 5;
             }
         }
@@ -251,7 +259,9 @@ namespace Assets.Scripts.Manager
         public class actions
         {
             public List<float> spawnTime { get; set; } = new List<float>();
-            public string actionType { get; set; }
+        public List<float> WaveSpawnTime { get; set; } = new List<float>();
+
+        public string actionType { get; set; }
             public bool managedByScheduler { get; set; }
             public string key { get; set; }
             public int count { get; set; }
