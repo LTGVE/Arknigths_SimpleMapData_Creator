@@ -33,7 +33,6 @@ public class CheckPoint : MonoBehaviour
     }
     void Start()
     {
-        init(0,0,0,0,0,CheckPointType.DISAPPEAR);
     }
 
     // Update is called once per frame

@@ -57,7 +57,7 @@ public class MapInit : MonoBehaviour
         var X = int.Parse(_this.transform.Find("X").GetComponent<InputField>().text);
         var Y = int.Parse(_this.transform.Find("Y").GetComponent<InputField>().text);
         BATTLE.transform.position = new Vector3(-X/2 +1, -Y/2, 0);
-        Tile.transform.localPosition = new Vector3(-BATTLE.transform.position.x, -BATTLE.transform.position.y, 0);
+       // Tile.transform.localPosition = new Vector3(-BATTLE.transform.position.x, -BATTLE.transform.position.y, 0);
         mapdata Mapdata = new mapdata();
         List<List<int>> map = new List<List<int>>();
         int count = 0;
@@ -72,7 +72,7 @@ public class MapInit : MonoBehaviour
                 tile.transform.localPosition = new Vector3(x,y); 
                 GameObject tileKey = new GameObject() { name = $"tile_fobbiden#({y},{x})" };
                 tileKey.transform.parent = Tile.transform;
-                tileKey.transform.localPosition = new Vector3(tile.transform.position.x, tile.transform.position.y, -0.5f);
+                tileKey.transform.localPosition = new Vector3(tile.transform.localPosition.x, tile.transform.localPosition.y, -0.5f);
                 tileKey.AddComponent<BoxCollider2D>();
                  tileKey.AddComponent<MapTile>().init(new Vector2(x,y));
                 var maptile=tileKey.GetComponent<MapTile>();

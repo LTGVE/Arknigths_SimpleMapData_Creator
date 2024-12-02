@@ -9,6 +9,7 @@ public class RouteManager : MonoBehaviour
     // Start is called before the first frame update
     [SerializeField]
     public Dropdown ListDropdown;
+    public static route selectedRoute;
     
     void Start()
     {
@@ -18,11 +19,14 @@ public class RouteManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (selectedRoute!=MapInit._this.LevelData.routes[int.Parse(ListDropdown.options[ListDropdown.value].text)]) {
+            selectedRoute = MapInit._this.LevelData.routes[int.Parse(ListDropdown.options[ListDropdown.value].text)];
+        }
     }
     public void AddNewRoute()
     {
         route route = new route();
         MapInit._this.LevelData.routes.Add(route);
-        ListDropdown.AddOptions(new List<Dropdown.OptionData>() { new Dropdown.OptionData() { text = (MapInit._this.LevelData.routes.Count - 1).ToString() } });
+        ListDropdown.options.Add(new Dropdown.OptionData( (MapInit._this.LevelData.routes.Count - 1).ToString()));
     }
 }
